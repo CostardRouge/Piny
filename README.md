@@ -2,7 +2,7 @@ Piny
 ====
 > A Pinterest Board downloader
 
-![First release](Assets/PinySS.png "Piny screen shoot")
+![First release](Assets/PinySS.PNG "Piny screen shoot")
 
 ### How to use
 
