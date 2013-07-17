@@ -91,6 +91,7 @@ namespace Piny
         private void ScanURLButtonClicked(object sender, RoutedEventArgs e)
         {
             this.BoardSourceCode.Text = new System.Net.WebClient().DownloadString(this.BoardURL.Text);
+            this.ScanSourceCodeButtonClicked(null, null);
         }
 
         private void DownloadFolderButtonClicked(object sender, RoutedEventArgs e)

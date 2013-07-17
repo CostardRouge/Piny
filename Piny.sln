@@ -1,12 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pinterest Board downloader", "Pinterest Board downloader.csproj", "{AEB8003A-82FD-4BCB-88D6-0524A1AE74F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Piny", "Piny.csproj", "{AEB8003A-82FD-4BCB-88D6-0524A1AE74F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Description = 
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{AEB8003A-82FD-4BCB-88D6-0524A1AE74F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
