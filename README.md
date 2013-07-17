@@ -4,18 +4,21 @@ Piny
 
 ![First release](Assets/PinySS.PNG "Piny screen shoot")
 
+### Download
+
+[Donwload Piny (version 0.1.0)](https://github.com/CostardRouge/Piny/releases/download/0.1.0/Piny-v0.1.0-Windows.zip "First version")
+
 ### How to use
 
-1. Open Piny.exe (in Binary folder)
-2. Enter the board source, can be a URL or the code source (useful for secret board)
-3. Click to scan (images found will be in the list)
-4. Choose a folder
-5. Click on the Download! button
-6. Enjoy :)
+1. Enter the board source, can be a URL or the code source (useful for secret board)
+2. Click to scan (images found will be in the list)
+3. Choose a folder
+4. Click on the Download! button
+5. Enjoy :)
 
 ### Release history
 
- * **v0.1** - First release (synchronous downloading, main thread blocked)
+https://github.com/CostardRouge/Piny/releases
 
 ### Author
 > Steeve Pommier
