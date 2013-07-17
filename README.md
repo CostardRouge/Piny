@@ -16,6 +16,12 @@ Piny
 4. Click on the Download! button
 5. Enjoy :)
 
+### Todo
+
+*
+*
+*
+
 ### Release history
 
 https://github.com/CostardRouge/Piny/releases

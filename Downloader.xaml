@@ -18,7 +18,6 @@
         </Grid>
         <ListView x:Name="ImagesListView" DockPanel.Dock="Right">
             <ListViewItem Content="ListViewItem"/>
-
         </ListView>
     </DockPanel>
 </Window>
