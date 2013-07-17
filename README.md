@@ -20,7 +20,7 @@ Piny
 > Steeve Pommier
 
 * [Github](https://github.com/CostardRouge)
-* [Website](http://www.mncorp.net)
 * [Twitter](https://twitter.com/LeBlousonRouge)
+* [Website](http://www.mncorp.net)
 * [Dev Tumblr](http://lastrevision.tumblr.com)
 * [Main Tumblr](http://costardrouge.tumblr.com/)
