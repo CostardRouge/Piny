@@ -22,31 +22,41 @@ namespace Piny
     /// </summary>
     public partial class Downloader : Window
     {
+        #region Constructors
         public Downloader()
         {
-            // Default call
+            // Default calls
             InitializeComponent();
 
             // Init attributes
-            this.Images = new List<string> { };
+            this.Success = false;
+            this.SaveThumbnails = false;
+            this.CreatedSpecificFolder = false;
+            this.WebClient_ = new WebClient();
+            this.OriginalImagesURLS = new List<string> { };
+            this.ThumbnailsImagesURLS = new List<string> { };
+            this.Dialog = new System.Windows.Forms.FolderBrowserDialog();
+            
+            // Init control attributes
             this.DownloadFolder.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
         }
+        #endregion
 
-        private void ScanSourceCodeButtonClicked(object sender, RoutedEventArgs e)
+        #region Methods
+
+        private bool AnalyseSourceCode()
         {
-            // Scan URL if source code filed is empty
-            if (this.BoardSourceCode.Text.Length == 0)
-            {
-                MessageBox.Show("BoardSourceCode empty.");
-                this.ScanURLButtonClicked(null, null);
-            }
+            // Find images URls in page source code by selecting nodes (thx to HtmlAgilityPack)
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(this.BoardSourceCode.Text);
 
-            // Clear previous results
-            this.Images.Clear();
-            this.ImagesListView.Items.Clear();
+            var itemList = doc.DocumentNode.SelectNodes("//img").ToList();
+            foreach (HtmlAgilityPack.HtmlNode x in itemList)
+               this.ThumbnailsImagesURLS.Add(x.Attributes["src"].Value);
 
-            // Find URls in page source code with regulary expression
-            Regex regx = new Regex("http://([\\w+?\\.\\w+])+([a-zA-Z0-9\\~\\!\\@\\#\\$\\%\\^\\&amp;\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\'\\,]*)?", RegexOptions.IgnoreCase);
+           // Find images URls in page source code with regulary expression
+
+            /*Regex regx = new Regex("http://([\\w+?\\.\\w+])+([a-zA-Z0-9\\~\\!\\@\\#\\$\\%\\^\\&amp;\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\'\\,]*)?", RegexOptions.IgnoreCase);
             MatchCollection matches = regx.Matches(this.BoardSourceCode.Text);
 
             foreach (Match match in matches)
@@ -56,25 +66,31 @@ namespace Piny
                     this.Images.Add(match.Value.Replace("236x", "originals"));
                     this.ImagesListView.Items.Add(match.Value.Replace("236x", "originals"));
                 }
+            }*/
+            return (true);
+        }
+
+        private void ScanSourceCodeButtonClicked(object sender, RoutedEventArgs e)
+        {
+            // Check if source code field is empty
+            if (this.BoardSourceCode.Text.Length == 0)
+            {
+                MessageBox.Show("Source code field is empty :(.", "Error");
+                this.Success = false;
             }
 
-            /*
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(this.BoardSourceCode.Text);
+            // Clear previous results
+            this.ThumbnailsImagesURLS.Clear();
+            this.ImagesListView.Items.Clear();
 
-            var itemList = doc.DocumentNode.SelectNodes("//img").ToList();
+            // Launch source code analyse
+            this.Success = this.AnalyseSourceCode();
 
-            foreach (HtmlAgilityPack.HtmlNode x in itemList)
-            {
-               
-                    this.Images.Add(x.Attributes["src"].Value);
-                    this.ImagesListView.Items.Add(x.Attributes["src"].Value);
-                
-            }*/
+            // Add and show results in ListView
+            this.ThumbnailsImagesURLS.ForEach(x => this.ImagesListView.Items.Add(x));
 
-           // Debug : Add total image count 
-            this.ImagesListView.Items.Add(this.Images.Count + " image(s)");
-
+            // Update Status Bar
+            // coming soon
         }
 
         // Temporary function, I know its crazy, LINQ expressions exist...
@@ -90,43 +106,70 @@ namespace Piny
 
         private void ScanURLButtonClicked(object sender, RoutedEventArgs e)
         {
-            this.BoardSourceCode.Text = new System.Net.WebClient().DownloadString(this.BoardURL.Text);
-            this.ScanSourceCodeButtonClicked(null, null);
+            // Check if url field is empty
+            if (this.BoardSourceCode.Text.Length == 0)
+            {
+                MessageBox.Show("URL field is empty :(.", "Error");
+                this.Success = false;
+            }
+
+            // Get source code from url
+            this.BoardSourceCode.Text = this.WebClient_.DownloadString(this.BoardURL.Text);
+
+            // Launch source code analyse
+            this.Success = this.AnalyseSourceCode();
+
+            // Add and show results in ListView
+            this.ThumbnailsImagesURLS.ForEach(x => this.ImagesListView.Items.Add(x));
+
+            // Update Status Bar
+            // coming soon
         }
 
         private void DownloadFolderButtonClicked(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog dialog = new System.Windows.Forms.FolderBrowserDialog();
-
-            System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+            System.Windows.Forms.DialogResult result = this.Dialog.ShowDialog();
 
             if (result == System.Windows.Forms.DialogResult.OK)
-                this.DownloadFolder.Text = dialog.SelectedPath; 
+                this.DownloadFolder.Text = Dialog.SelectedPath; 
         }
 
         private void DownloadButtonClicked(object sender, RoutedEventArgs e)
         {
-            WebClient webClient = new WebClient();
-
-            // Scann if the user didnot
-            if (this.Images.Count == 0)
-                this.ScanSourceCodeButtonClicked(null, null);
-
             // Check if download folder exist
             if (!Directory.Exists(this.DownloadFolder.Text))
             {
-                MessageBox.Show("DownloadFolder err.");
-                return;
+                MessageBox.Show("Download Button", "Error");
+                this.Success = false;
             }
 
-            foreach (string fileurl in this.Images)
+            // Scann if the user didnot
+            if (this.ThumbnailsImagesURLS.Count == 0)
+            {
+                this.Success = this.AnalyseSourceCode();
+            }
+
+            // Get originals images
+            this.ThumbnailsImagesURLS.ForEach(img => this.OriginalImagesURLS.Add(img.Replace("236x", "originals")));
+
+            // Download all the originals images
+            this.OriginalImagesURLS.ForEach(delegate(string fileurl)
             {
                 Uri uri = new Uri(fileurl);
                 string filename = System.IO.Path.GetFileName(uri.LocalPath);
-                webClient.DownloadFile(fileurl, String.Format("{0}\\{1}", this.DownloadFolder.Text, filename));
-            }
+                this.WebClient_.DownloadFile(fileurl, String.Format("{0}\\{1}", this.DownloadFolder.Text, filename));
+            });
         }
+        #endregion
 
-        private List<string> Images { get; set; }
+        #region Attributes
+        private bool Success { get; set; }
+        private WebClient WebClient_ { get; set; }
+        private bool SaveThumbnails { get; set; }
+        private bool CreatedSpecificFolder { get; set; }
+        private List<string> OriginalImagesURLS { get; set; }
+        private List<string> ThumbnailsImagesURLS { get; set; }
+        private System.Windows.Forms.FolderBrowserDialog Dialog { get; set; }
+        #endregion
     }
 }

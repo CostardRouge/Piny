@@ -18,9 +18,9 @@ Piny
 
 ### Todo
 
-*
-*
-*
+* Improve design with Pinterest website colors
+* ListView with thumbnails (compressed, with ou  without cache)
+* Support infinite scroll page
 
 ### Release history
 
