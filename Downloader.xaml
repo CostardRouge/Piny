@@ -1,10 +1,28 @@
 ﻿<Window x:Class="Piny.Downloader"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Piny - the Pinterest Board downloader" Height="480" Width="720">
-    <DockPanel>
-        <Grid Width="192" HorizontalAlignment="Left">
-            <Label Content="Board URL :" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" FontWeight="Bold" Padding="0,5,5,5"/>
+        Title="Pinterest Board Downloader" Height="480" Width="720" Icon="Assets/Icon.ico">
+    <DockPanel LastChildFill="True" Background="#FFECECEC">
+        <Border DockPanel.Dock="Top" BorderThickness="0,0,0,1" BorderBrush="Black">
+            <StatusBar x:Name="StatusBar" Height="32" Background="White" >
+                <TextBlock>
+                    <Hyperlink x:Name="ApplicationLink" NavigateUri="https://github.com/CostardRouge/Piny">Piny</Hyperlink>
+                </TextBlock>
+            </StatusBar>
+        </Border>
+
+        <Border DockPanel.Dock="Bottom" BorderThickness="0,1,0,0" BorderBrush="Black">
+            <StatusBar x:Name="BottomStatusBar" Height="32" Background="White" VerticalAlignment="Center">
+                <TextBlock>
+                    <Run>created by</Run>
+                    <Hyperlink x:Name="DeveloperLink" NavigateUri="https://github.com/CostardRouge">CostardRouge</Hyperlink>
+                    <Run>.</Run>
+                </TextBlock>
+            </StatusBar>
+        </Border>
+
+        <Grid Width="192" HorizontalAlignment="Left" DockPanel.Dock="Left">
+            <Label Content="Board URL :" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Padding="0,5,5,5"/>
             <TextBox x:Name="BoardURL" HorizontalAlignment="Left" Height="32" Margin="10,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="172"/>
             <Button x:Name="ScanURLButton" Content="Scan Board URL" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Width="172" Height="32" Click="ScanURLButtonClicked"/>
             <Label Content="Board code source :" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" FontWeight="Bold" Padding="0,5,5,5"/>
@@ -14,10 +32,11 @@
             <TextBox x:Name="DownloadFolder" HorizontalAlignment="Left" Height="32" Margin="10,333,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="116" VerticalContentAlignment="Bottom"/>
             <Button x:Name="DownloadFolderButton" Content="Change" HorizontalAlignment="Left" Margin="131,333,0,0" VerticalAlignment="Top" Width="51" Height="32" VerticalContentAlignment="Center" Click="DownloadFolderButtonClicked"/>
             <Button x:Name="DownloadButton" Content="Download!" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="172" Height="58" Click="DownloadButtonClicked"/>
-
         </Grid>
-        <ListView x:Name="ImagesListView" DockPanel.Dock="Right">
+        
+        <ListView x:Name="ImagesListView" DockPanel.Dock="Top" BorderThickness="0">
             <ListViewItem Content="ListViewItem"/>
         </ListView>
+
     </DockPanel>
 </Window>

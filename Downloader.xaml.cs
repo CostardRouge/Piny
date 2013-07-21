@@ -14,6 +14,8 @@ using System.Windows.Shapes;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Diagnostics;
+using System.Windows.Navigation;
 
 namespace Piny
 {
@@ -39,10 +41,18 @@ namespace Piny
             
             // Init control attributes
             this.DownloadFolder.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+
+            // Init events
+            this.DeveloperLink.RequestNavigate += new RequestNavigateEventHandler(RequestNavigateHandler);
+            this.ApplicationLink.RequestNavigate += new RequestNavigateEventHandler(RequestNavigateHandler);
         }
         #endregion
 
         #region Methods
+        private void RequestNavigateHandler(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(e.Uri.ToString());
+        }
 
         private bool AnalyseSourceCode()
         {
@@ -52,7 +62,8 @@ namespace Piny
 
             var itemList = doc.DocumentNode.SelectNodes("//img").ToList();
             foreach (HtmlAgilityPack.HtmlNode x in itemList)
-               this.ThumbnailsImagesURLS.Add(x.Attributes["src"].Value);
+               // if (this.ThumbnailsImagesURLS.Any(img => img.CompareTo(x.Attributes["src"].Value).Equals(false)))
+                    this.ThumbnailsImagesURLS.Add(x.Attributes["src"].Value);
 
            // Find images URls in page source code with regulary expression
 
@@ -93,24 +104,14 @@ namespace Piny
             // coming soon
         }
 
-        // Temporary function, I know its crazy, LINQ expressions exist...
-        public bool exist(List<string> l, string e)
-        {
-            foreach (string s in l)
-            {
-                if (e == s)
-                    return true;
-            }
-            return false;
-        }
-
         private void ScanURLButtonClicked(object sender, RoutedEventArgs e)
         {
             // Check if url field is empty
-            if (this.BoardSourceCode.Text.Length == 0)
+            if (this.BoardURL.Text.Length == 0)
             {
                 MessageBox.Show("URL field is empty :(.", "Error");
                 this.Success = false;
+                return;
             }
 
             // Get source code from url
@@ -141,6 +142,7 @@ namespace Piny
             {
                 MessageBox.Show("Download Button", "Error");
                 this.Success = false;
+                return;
             }
 
             // Scann if the user didnot
