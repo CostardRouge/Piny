@@ -1,30 +1,36 @@
 Piny
 ====
-> A Pinterest Board downloader
+> A tool to download image from Pinterest board
 
 ![First release](Assets/PinySS.PNG "Piny screen shoot")
 
 ### Download
 
-[Donwload Piny (version 0.1.0)](https://github.com/CostardRouge/Piny/releases/download/0.1.0/Piny-v0.1.0-Windows.zip "First version")
+
+* [Donwload Piny - version 0.2.0](https://github.com/CostardRouge/Piny/releases/download/0.2.0/Piny-v0.2.0-Windows.zip "Second version")
+* [Donwload Piny - version 0.1.0](https://github.com/CostardRouge/releases/Piny/download/0.1.0/Piny-v0.1.0-Windows.zip "First version")
+
 
 ### How to use
 
-1. Enter the board source, can be a URL or the code source (useful for secret board)
-2. Click to scan (images found will be in the list)
+1. Enter the board URL
+2. Click to scan (images found will be show as thumbnails)
 3. Choose a folder
 4. Click on the Download! button
 5. Enjoy :)
 
 ### Todo
 
-* Improve design with Pinterest website colors
-* ListView with thumbnails (compressed, with ou  without cache)
 * Support infinite scroll page
+* Download from anypage page of the site.
+* Options to create a folder with the board name.
+* Options to also save the thumbnails ?!
+* Asyncronous download
+* Progress bar
 
 ### Release history
 
-https://github.com/CostardRouge/Piny/releases
+All releases are here : https://github.com/CostardRouge/Piny/releases
 
 ### Author
 > Steeve Pommier
