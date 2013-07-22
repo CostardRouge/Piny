@@ -63,7 +63,7 @@
     </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -154,7 +154,6 @@
   <ItemGroup>
     <Resource Include="Assets\PinySS.PNG" />
     <Resource Include="Assets\Icon.ico" />
-    <Resource Include="Icon.ico" />
     <Content Include="References\HtmlAgilityPack.dll" />
   </ItemGroup>
   <ItemGroup>

@@ -1,42 +1,105 @@
 ﻿<Window x:Class="Piny.Downloader"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Pinterest Board Downloader" Height="480" Width="720" Icon="Assets/Icon.ico">
-    <DockPanel LastChildFill="True" Background="#FFECECEC">
-        <Border DockPanel.Dock="Top" BorderThickness="0,0,0,1" BorderBrush="Black">
-            <StatusBar x:Name="StatusBar" Height="32" Background="White" >
-                <TextBlock>
-                    <Hyperlink x:Name="ApplicationLink" NavigateUri="https://github.com/CostardRouge/Piny">Piny</Hyperlink>
-                </TextBlock>
-            </StatusBar>
-        </Border>
+        Title="Pinterest Board Downloader" MinHeight="400" MinWidth="700" Height="480" Width="720" Icon="Assets/Icon.ico" ToolTip="Download images from a Pinterest Board.">
 
-        <Border DockPanel.Dock="Bottom" BorderThickness="0,1,0,0" BorderBrush="Black">
-            <StatusBar x:Name="BottomStatusBar" Height="32" Background="White" VerticalAlignment="Center">
-                <TextBlock>
-                    <Run>created by</Run>
-                    <Hyperlink x:Name="DeveloperLink" NavigateUri="https://github.com/CostardRouge">CostardRouge</Hyperlink>
-                    <Run>.</Run>
-                </TextBlock>
-            </StatusBar>
-        </Border>
-
-        <Grid Width="192" HorizontalAlignment="Left" DockPanel.Dock="Left">
-            <Label Content="Board URL :" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Padding="0,5,5,5"/>
-            <TextBox x:Name="BoardURL" HorizontalAlignment="Left" Height="32" Margin="10,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="172"/>
-            <Button x:Name="ScanURLButton" Content="Scan Board URL" HorizontalAlignment="Left" Margin="10,68,0,0" VerticalAlignment="Top" Width="172" Height="32" Click="ScanURLButtonClicked"/>
-            <Label Content="Board code source :" HorizontalAlignment="Left" Margin="10,110,0,0" VerticalAlignment="Top" FontWeight="Bold" Padding="0,5,5,5"/>
-            <Button x:Name="ScanSourceCodeButton" Content="Scan Board source page" HorizontalAlignment="Left" Margin="10,264,0,0" VerticalAlignment="Top" Width="172" Height="32" Click="ScanSourceCodeButtonClicked"/>
-            <TextBox x:Name="BoardSourceCode" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" Height="123" Margin="10,136,0,0" VerticalAlignment="Top" Width="172" VerticalScrollBarVisibility="Visible"/>
-            <Label Content="Download folder :" HorizontalAlignment="Left" Margin="10,307,0,0" VerticalAlignment="Top" FontWeight="Bold" Padding="0,5,5,5" VerticalContentAlignment="Bottom"/>
-            <TextBox x:Name="DownloadFolder" HorizontalAlignment="Left" Height="32" Margin="10,333,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="116" VerticalContentAlignment="Bottom"/>
-            <Button x:Name="DownloadFolderButton" Content="Change" HorizontalAlignment="Left" Margin="131,333,0,0" VerticalAlignment="Top" Width="51" Height="32" VerticalContentAlignment="Center" Click="DownloadFolderButtonClicked"/>
-            <Button x:Name="DownloadButton" Content="Download!" HorizontalAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Width="172" Height="58" Click="DownloadButtonClicked"/>
-        </Grid>
+    <Window.Resources>
+    <ItemsPanelTemplate x:Key="Banner">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+    </ItemsPanelTemplate>
         
-        <ListView x:Name="ImagesListView" DockPanel.Dock="Top" BorderThickness="0">
-            <ListViewItem Content="ListViewItem"/>
-        </ListView>
+    <ControlTemplate x:Key="BannerItem" TargetType="{x:Type ListBoxItem}">
+        <Grid x:Name="grid" Margin="25,0" Width="{TemplateBinding Width}">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="MouseOver"/>
+                    <VisualState x:Name="Disabled"/>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="SelectionStates">
+                    <VisualState x:Name="Unselected"/>
+                    <VisualState x:Name="Selected">
+                        <Storyboard>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)" Storyboard.TargetName="label">
+                                <EasingColorKeyFrame KeyTime="0" Value="Black"/>
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="SelectedUnfocused">
+                        <Storyboard>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)" Storyboard.TargetName="label">
+                                <EasingColorKeyFrame KeyTime="0" Value="Black"/>
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="FocusStates">
+                    <VisualState x:Name="Unfocused"/>
+                    <VisualState x:Name="Focused"/>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Label x:Name="label" Content="{TemplateBinding Content}" Margin="0" Width="{TemplateBinding Width}" FontWeight="Bold" Foreground="White" Cursor="Hand" Background="#00136636" BorderBrush="Black">
+                <Label.Effect>
+                    <DropShadowEffect BlurRadius="2" ShadowDepth="0" RenderingBias="Quality" Direction="0"/>
+                </Label.Effect>
+            </Label>
+        </Grid>
+    </ControlTemplate>
+    </Window.Resources>
 
+    <DockPanel LastChildFill="True" Background="#FFECECEC">
+        <Border DockPanel.Dock="Top" BorderThickness="0,0,0,1" BorderBrush="#FF383838">
+            <Grid Background="White" Height="35">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox AcceptsReturn="True" x:Name="BoardSource" ToolTip="Enter URL here." BorderThickness="0,0,0,1" VerticalAlignment="Center" Height="24" Margin="10,0" VerticalContentAlignment="Center" FontSize="14" Grid.Column="0" HorizontalContentAlignment="Stretch" Text=""/>
+                <Button x:Name="ScanButton" Content="Scan" HorizontalAlignment="Center" VerticalAlignment="Center" Height="24" Click="ScanButtonClicked" Margin="0,0,10,0" Width="62" ToolTip="Scan the page." Grid.Column="1"/>
+             </Grid>
+        </Border>
+
+        <ListBox SelectedIndex="1" DockPanel.Dock="Top" BorderBrush="#FFA41818" BorderThickness="0,0,0,1" ItemsPanel="{DynamicResource Banner}" Background="#FFCD3737" Height="35">
+            <ListBox.Effect>
+                <DropShadowEffect ShadowDepth="2" Direction="270" BlurRadius="3" Opacity="0.175"/>
+            </ListBox.Effect>
+            <ListBoxItem Content="List" Template="{DynamicResource BannerItem}" ToolTip="Show as list." ScrollViewer.VerticalScrollBarVisibility="Disabled" IsEnabled="False" ></ListBoxItem>
+            <ListBoxItem Content="Thumbnails" Template="{DynamicResource BannerItem}" ToolTip="Show as thumbnails." ></ListBoxItem>
+            <ListBoxItem Content="Both" Template="{DynamicResource BannerItem}" ToolTip="Show as list and thumbnails." IsEnabled="False" ></ListBoxItem>
+        </ListBox>
+        <!--
+        <Border DockPanel.Dock="Bottom" BorderThickness="0,1,0,0" BorderBrush="#FFF1F1F1">
+            <StatusBar x:Name="BottomStatusBar" Height="32" Background="White">
+                <TextBlock HorizontalAlignment="Center">
+                <Hyperlink x:Name="ApplicationLink" NavigateUri="https://github.com/CostardRouge/Piny">Piny</Hyperlink>
+                <Run>created by</Run>
+                <Hyperlink x:Name="DeveloperLink" NavigateUri="https://github.com/CostardRouge">CostardRouge</Hyperlink>
+                <Run>.</Run>
+                </TextBlock>
+            </StatusBar>
+        </Border>
+        -->
+
+        <Border DockPanel.Dock="Bottom" BorderThickness="0,1,0,0" BorderBrush="#FFC1C1C1">
+        <Grid Background="White" Height="35">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.Effect>
+                    <DropShadowEffect ShadowDepth="2" Direction="90" Opacity="0.065" BlurRadius="3"/>
+            </Grid.Effect>
+            <Button Visibility="Hidden" x:Name="ScanSourceCodeButton" Width="50" Content="Scan Board source page" Click="ScanSourceCodeButtonClicked" HorizontalAlignment="Center" Margin="342,0,79,0"/>
+            <TextBox Visibility="Hidden" x:Name="BoardSourceCode" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Width="141"/>
+    
+            <TextBox x:Name="DownloadFolder" ToolTip="Download folder here." BorderThickness="0,0,0,1" VerticalAlignment="Top" Height="24" Margin="10,5,72,0" VerticalContentAlignment="Center" FontSize="14"/>
+            <Button x:Name="ChangeDownloadFolder" Content="Change" HorizontalAlignment="Right" Height="24" VerticalContentAlignment="Center" Click="DownloadFolderButtonClicked" Margin="35,5,0,5" Width="62" ToolTip="Change download folder." HorizontalContentAlignment="Center"/>
+            <Button x:Name="DownloadButton" Content="Download!" Width="172" Height="24" Click="DownloadButtonClicked" HorizontalAlignment="Right" Margin="10,5" ToolTip="Download originals images here." Grid.Column="2" Cursor="None" IsEnabled="False"/>
+            </Grid>
+        </Border>
+        
+        <ScrollViewer x:Name="ThumbnailsViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" ToolTip="(Images found will be shown here)" Panel.ZIndex="-1">
+            <WrapPanel x:Name="Thumbnails" Orientation="Horizontal" VerticalAlignment="Top" />
+        </ScrollViewer>
     </DockPanel>
 </Window>

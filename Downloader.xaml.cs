@@ -40,11 +40,12 @@ namespace Piny
             this.Dialog = new System.Windows.Forms.FolderBrowserDialog();
             
             // Init control attributes
-            this.DownloadFolder.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            this.DownloadFolder.Text= Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
             // Init events
-            this.DeveloperLink.RequestNavigate += new RequestNavigateEventHandler(RequestNavigateHandler);
+            /*this.DeveloperLink.RequestNavigate += new RequestNavigateEventHandler(RequestNavigateHandler);
             this.ApplicationLink.RequestNavigate += new RequestNavigateEventHandler(RequestNavigateHandler);
+             * */
         }
         #endregion
 
@@ -62,7 +63,7 @@ namespace Piny
 
             var itemList = doc.DocumentNode.SelectNodes("//img").ToList();
             foreach (HtmlAgilityPack.HtmlNode x in itemList)
-               // if (this.ThumbnailsImagesURLS.Any(img => img.CompareTo(x.Attributes["src"].Value).Equals(false)))
+                if (!x.Attributes["src"].Value.Contains("avatars") && !x.Attributes["src"].Value.Contains("api"))
                     this.ThumbnailsImagesURLS.Add(x.Attributes["src"].Value);
 
            // Find images URls in page source code with regulary expression
@@ -84,47 +85,74 @@ namespace Piny
         private void ScanSourceCodeButtonClicked(object sender, RoutedEventArgs e)
         {
             // Check if source code field is empty
-            if (this.BoardSourceCode.Text.Length == 0)
+           /* if (this.BoardSourceCode.Text.Length == 0)
             {
                 MessageBox.Show("Source code field is empty :(.", "Error");
                 this.Success = false;
-            }
+                return;
+            }*/
 
             // Clear previous results
             this.ThumbnailsImagesURLS.Clear();
-            this.ImagesListView.Items.Clear();
+            this.Thumbnails.Children.Clear();
 
             // Launch source code analyse
             this.Success = this.AnalyseSourceCode();
 
             // Add and show results in ListView
-            this.ThumbnailsImagesURLS.ForEach(x => this.ImagesListView.Items.Add(x));
+            //this.ThumbnailsImagesURLS.ForEach(x => this.ImagesListView.Items.Add(x));
 
             // Update Status Bar
             // coming soon
         }
 
-        private void ScanURLButtonClicked(object sender, RoutedEventArgs e)
+        private void ScanButtonClicked(object sender, RoutedEventArgs e)
         {
-            // Check if url field is empty
-            if (this.BoardURL.Text.Length == 0)
+            // Get source code from URL
+            if (this.BoardSource.Text.Length > 0 && this.BoardSource.Text.Contains("pinterest.com"))
             {
-                MessageBox.Show("URL field is empty :(.", "Error");
-                this.Success = false;
+                // to do : handle exceptions
+                this.BoardSourceCode.Text = this.WebClient_.DownloadString(this.BoardSource.Text);
+            }
+            else if (this.BoardSource.Text.Length == 0)
+            {
+                MessageBox.Show("URL field is empty.", "Error");
+                return;
+            }
+            else
+            {
+                MessageBox.Show("Problem with the URL.", "Error");
                 return;
             }
 
-            // Get source code from url
-            this.BoardSourceCode.Text = this.WebClient_.DownloadString(this.BoardURL.Text);
+            // Clear previous results
+            this.ThumbnailsImagesURLS.Clear();
+            this.Thumbnails.Children.Clear();
 
             // Launch source code analyse
             this.Success = this.AnalyseSourceCode();
 
-            // Add and show results in ListView
-            this.ThumbnailsImagesURLS.ForEach(x => this.ImagesListView.Items.Add(x));
+            // Show result
+            int count = this.ThumbnailsImagesURLS.Count;
+            this.ThumbnailsImagesURLS.ForEach(delegate(string url)
+            {
+                var l = new Image();
+                var s = this.WebClient_.OpenRead(url);
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.StreamSource = s;
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.EndInit();
+                l.Source = bitmap;
+                l.MaxWidth = 200;
+                this.Thumbnails.Children.Add(l);
+            });
 
-            // Update Status Bar
-            // coming soon
+            // Update Status Text
+            this.ThumbnailsViewer.ToolTip = String.Format("({0}{1} image{2} found)", (count == 1 ? "only " : null), count, (count > 1 ? "s" : null));   
+
+            // Enable Download button
+            this.DownloadButton.IsEnabled = (count > 0 ? true : false);
         }
 
         private void DownloadFolderButtonClicked(object sender, RoutedEventArgs e)
@@ -140,15 +168,8 @@ namespace Piny
             // Check if download folder exist
             if (!Directory.Exists(this.DownloadFolder.Text))
             {
-                MessageBox.Show("Download Button", "Error");
-                this.Success = false;
+                MessageBox.Show("The download folder doesn't exist.", "Error");
                 return;
-            }
-
-            // Scann if the user didnot
-            if (this.ThumbnailsImagesURLS.Count == 0)
-            {
-                this.Success = this.AnalyseSourceCode();
             }
 
             // Get originals images
@@ -159,6 +180,7 @@ namespace Piny
             {
                 Uri uri = new Uri(fileurl);
                 string filename = System.IO.Path.GetFileName(uri.LocalPath);
+                // to do : handle exceptions
                 this.WebClient_.DownloadFile(fileurl, String.Format("{0}\\{1}", this.DownloadFolder.Text, filename));
             });
         }
