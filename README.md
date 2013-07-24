@@ -6,7 +6,7 @@ Piny
 
 ### Download
 
-* [Donwload Piny - version 0.3.0](https://github.com/CostardRouge/Piny/releases/download/0.2.0/Piny-v0.3.0-Windows.zip "Third release")
+* [Donwload Piny - version 0.3.0](https://github.com/CostardRouge/Piny/releases/download/0.3.0/Piny-v0.3.0-Windows.zip "Third release")
 * [Donwload Piny - version 0.2.0](https://github.com/CostardRouge/Piny/releases/download/0.2.0/Piny-v0.2.0-Windows.zip "Second release")
 * [Donwload Piny - version 0.1.0](https://github.com/CostardRouge/Piny/releases/download/0.1.0/Piny-v0.1.0-Windows.zip "First release")
 
