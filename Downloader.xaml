@@ -88,18 +88,31 @@
                 </Grid.ColumnDefinitions>
                 <Grid.Effect>
                     <DropShadowEffect ShadowDepth="2" Direction="90" Opacity="0.065" BlurRadius="3"/>
-            </Grid.Effect>
-            <Button Visibility="Hidden" x:Name="ScanSourceCodeButton" Width="50" Content="Scan Board source page" Click="ScanSourceCodeButtonClicked" HorizontalAlignment="Center" Margin="342,0,79,0"/>
-            <TextBox Visibility="Hidden" x:Name="BoardSourceCode" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Width="141"/>
-    
-            <TextBox x:Name="DownloadFolder" ToolTip="Download folder here." BorderThickness="0,0,0,1" VerticalAlignment="Top" Height="24" Margin="10,5,72,0" VerticalContentAlignment="Center" FontSize="14"/>
-            <Button x:Name="ChangeDownloadFolder" Content="Change" HorizontalAlignment="Right" Height="24" VerticalContentAlignment="Center" Click="DownloadFolderButtonClicked" Margin="35,5,0,5" Width="62" ToolTip="Change download folder." HorizontalContentAlignment="Center"/>
-            <Button x:Name="DownloadButton" Content="Download!" Width="172" Height="24" Click="DownloadButtonClicked" HorizontalAlignment="Right" Margin="10,5" ToolTip="Download originals images here." Grid.Column="2" Cursor="None" IsEnabled="False"/>
+                </Grid.Effect>
+                <Button Visibility="Hidden" x:Name="ScanSourceCodeButton" Width="50" Content="Scan Board source page" HorizontalAlignment="Center" Margin="342,0,79,0"/>
+                <TextBox Visibility="Hidden" x:Name="BoardSourceCode" TextWrapping="Wrap" AcceptsReturn="True" HorizontalAlignment="Left" VerticalScrollBarVisibility="Visible" Width="141"/>
+
+                <TextBox x:Name="DownloadFolder" ToolTip="Download folder here." BorderThickness="0,0,0,1" VerticalAlignment="Top" Height="24" Margin="10,5,72,0" VerticalContentAlignment="Center" FontSize="14"/>
+                <Button x:Name="ChangeDownloadFolder" Content="Change" HorizontalAlignment="Right" Height="24" VerticalContentAlignment="Center" Click="DownloadFolderButtonClicked" Margin="35,5,0,5" Width="62" ToolTip="Change download folder." HorizontalContentAlignment="Center"/>
+                <Button x:Name="DownloadButton" Content="Download!" Width="172" Height="24" Click="DownloadButtonClicked" HorizontalAlignment="Right" Margin="10,5" ToolTip="Download originals images here." Grid.Column="2" IsEnabled="False"/>
+                <ProgressBar Visibility="Hidden" x:Name="DownloadProgressionBar" HorizontalAlignment="Stretch" Height="35" VerticalAlignment="Stretch" BorderThickness="0" Foreground="#FF06B025" Background="#FFC1C1C1"/>
+                <Label Visibility="Hidden" x:Name="DownloadProgressionText" Foreground="White" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                    <Label.Effect>
+                        <DropShadowEffect ShadowDepth="0" BlurRadius="2"/>
+                    </Label.Effect>
+                </Label>
             </Grid>
         </Border>
-        
-        <ScrollViewer x:Name="ThumbnailsViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" ToolTip="(Images found will be shown here)" Panel.ZIndex="-1">
-            <WrapPanel x:Name="Thumbnails" Orientation="Horizontal" VerticalAlignment="Top" />
-        </ScrollViewer>
+
+        <Grid>
+            <Label x:Name="InformationsText" HorizontalAlignment="Center" VerticalAlignment="Center">
+                Enter a URL and click on Scan
+            </Label>
+
+            <ScrollViewer x:Name="ThumbnailsViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" ToolTip="(Images found will be shown here)" Panel.ZIndex="-1">
+                <WrapPanel x:Name="Thumbnails" Orientation="Horizontal" VerticalAlignment="Top" />
+            </ScrollViewer>
+        </Grid>
+
     </DockPanel>
 </Window>

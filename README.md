@@ -1,15 +1,14 @@
 Piny
 ====
-> A tool to download image from Pinterest boards.
+> A tool to download images from Pinterest boards.
 
-![First release](Assets/PinySS.PNG "Piny screen shoot")
+![Example](Assets/PinySS.PNG "Piny screenshoot")
 
 ### Download
 
-
-* [Donwload Piny - version 0.2.0](https://github.com/CostardRouge/Piny/releases/download/0.2.0/Piny-v0.2.0-Windows.zip "Second version")
-* [Donwload Piny - version 0.1.0](https://github.com/CostardRouge/Piny/releases/download/0.1.0/Piny-v0.1.0-Windows.zip "First version")
-
+* [Donwload Piny - version 0.3.0](https://github.com/CostardRouge/Piny/releases/download/0.2.0/Piny-v0.3.0-Windows.zip "Third release")
+* [Donwload Piny - version 0.2.0](https://github.com/CostardRouge/Piny/releases/download/0.2.0/Piny-v0.2.0-Windows.zip "Second release")
+* [Donwload Piny - version 0.1.0](https://github.com/CostardRouge/Piny/releases/download/0.1.0/Piny-v0.1.0-Windows.zip "First release")
 
 ### How to use
 
@@ -25,8 +24,7 @@ Piny
 * Download from anypage page of the site.
 * Options to create a folder with the board name.
 * Options to also save the thumbnails ?!
-* Asyncronous download
-* Progress bar
+* Handles exceptions
 
 ### Release history
 

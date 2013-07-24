@@ -103,6 +103,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PinterestImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -156,9 +157,7 @@
     <Resource Include="Assets\Icon.ico" />
     <Content Include="References\HtmlAgilityPack.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Sources\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
