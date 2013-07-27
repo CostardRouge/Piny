@@ -91,6 +91,10 @@ namespace Piny
             // Get source code from URL
             if (this.BoardSource.Text.Length > 0 && this.BoardSource.Text.Contains("pinterest.com"))
             {
+                // Download source code
+                if (this.WebClient_.IsBusy)
+                    this.WebClient_.CancelAsync();
+          
                 this.WebClient_.DownloadStringAsync(new Uri(this.BoardSource.Text));
 
                 // Hide result and show informations text
@@ -102,7 +106,7 @@ namespace Piny
                 this.Thumbnails.Children.Clear();
                 this.ThumbnailImages.Clear();
 
-                // Dis-enable scan button
+                // Disable scan button
                 this.ScanButton.IsEnabled = false;
             }
             else if (this.BoardSource.Text.Length == 0)
@@ -166,7 +170,8 @@ namespace Piny
             if (thumbnail != null)
             {
                 thumbnail.thumbnaildownlaoded = true;
-                thumbnail.LoadImageFromStream(e.Result);
+                if (!this.WebClient_.IsBusy)
+                    thumbnail.LoadImageFromStream(e.Result);
                 this.Thumbnails.Children.Add(thumbnail.image);
             }
 
@@ -259,6 +264,9 @@ namespace Piny
             // Show download progression
             this.DownloadProgressionBar.Visibility = Visibility.Visible;
             this.DownloadProgressionText.Visibility = Visibility.Visible;
+
+            // Disable scan button
+            this.ScanButton.IsEnabled = false;
         }
 
         private void HideDownloadProgressionStats()
@@ -274,6 +282,9 @@ namespace Piny
             // Hide download progression
             this.DownloadProgressionBar.Visibility = Visibility.Hidden;
             this.DownloadProgressionText.Visibility = Visibility.Hidden;
+
+            // Enable scan button
+            this.ScanButton.IsEnabled = true;
         }
         #endregion
 
