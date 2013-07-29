@@ -91,6 +91,14 @@ namespace Piny
             // Get source code from URL
             if (this.BoardSource.Text.Length > 0 && this.BoardSource.Text.Contains("pinterest.com"))
             {
+                // Disable scan button
+                this.ScanButton.IsEnabled = false;
+                this.DownloadButton.IsEnabled = false;
+
+                // Clear previous results
+                this.Thumbnails.Children.Clear();
+                this.ThumbnailImages.Clear();
+
                 // Download source code
                 if (this.WebClient_.IsBusy)
                     this.WebClient_.CancelAsync();
@@ -101,13 +109,6 @@ namespace Piny
                 this.ThumbnailsViewer.Visibility = Visibility.Hidden;
                 this.InformationsText.Visibility = Visibility.Visible;
                 this.InformationsText.Content = "Scan in progress...";
-
-                // Clear previous results
-                this.Thumbnails.Children.Clear();
-                this.ThumbnailImages.Clear();
-
-                // Disable scan button
-                this.ScanButton.IsEnabled = false;
             }
             else if (this.BoardSource.Text.Length == 0)
             {
@@ -170,10 +171,15 @@ namespace Piny
             if (thumbnail != null)
             {
                 thumbnail.thumbnaildownlaoded = true;
-                if (!this.WebClient_.IsBusy)
+                if (!this.WebClient_.IsBusy && !e.Cancelled)
+                {
                     thumbnail.LoadImageFromStream(e.Result);
-                this.Thumbnails.Children.Add(thumbnail.image);
+                    this.Thumbnails.Children.Add(thumbnail.image);
+                }
             }
+
+            int count = this.ThumbnailImages.Count;
+            int done = this.ThumbnailImages.Where(x => x.thumbnaildownlaoded.Equals(true)).ToList().Count;
 
             // Download the next thumbnails
             thumbnail = this.ThumbnailImages.Find(x => x.thumbnaildownlaoded.Equals(false));
