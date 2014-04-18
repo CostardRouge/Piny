@@ -34,8 +34,5 @@ All releases are here : https://github.com/CostardRouge/Piny/releases
 ### Author
 > Steeve Pommier
 
-* [Github](https://github.com/CostardRouge)
+* [Website](http://costardrouge.eu)
 * [Twitter](https://twitter.com/LeBlousonRouge)
-* [Website](http://www.mncorp.net)
-* [Dev Tumblr](http://lastrevision.tumblr.com)
-* [Main Tumblr](http://costardrouge.tumblr.com/)
